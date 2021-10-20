@@ -14,15 +14,15 @@ db.connect((err)=>{
         process.exit();
     }
     else{
-        // app.listen(3000,()=>{
-        //     console.log("Connected to database and listening on port 3000 http://localhost:3000");
-        // });
+        app.listen(3000,()=>{
+            console.log("Connected to database and listening on port 3000 http://localhost:3000");
+        });
 
-        // Establishing the port
-        const PORT = process.env.PORT ||3000;
+//         // Establishing the port
+//         const PORT = process.env.PORT ||3000;
 
-        // Executing the server on given port number
-        app.listen(PORT, console.log(`Server started on port ${PORT}`));
+//         // Executing the server on given port number
+//         app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 
 
