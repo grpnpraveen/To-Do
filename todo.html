@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            padding-bottom: 12%;
+            width:100%;
+            height:100%;
+           background-image: url("mountains1.jpg");
+           background-repeat: no-repeat;
+           background-attachment: fixed;
+            background-size: 100vw 100vh;    
+        }
+        #static{
+            position: fixed;
+            width:60%;
+            min-width: 30%;
+            margin-left: 20%;
+            margin-top: 85vh;
+            overflow-y:hidden;
+            overflow-x:hidden;
+            z-index: 100;
+            padding: 2%;
+            background-color: black;
+            border-radius: 8px;
+            box-shadow: -7px -10px 18px #302f2f;
+            height:30%;
+        }
+        #userInput{
+            padding: 1%;
+            width: 40%;
+            margin-left: 10%;
+            text-align: center;
+            font-family: Balsamiq Sans;
+            font-size: medium;
+        }
+        #create{
+            cursor: pointer;
+            border-radius: 6px;
+            margin-left: 10%;
+            padding: 2% 5%;
+            background-color:greenyellow;
+            font-size: large;
+        }
+        #container{
+            /* width:100%; */
+            position: relative;
+            margin-left: 10%;
+            margin-right: 20%;
+            padding-top: 4%;
+            margin-left: 30%;
+        }
+        #display{
+            display: flex;
+            flex-direction: column;
+        }
+        .row{
+            position: relative;
+            background-color: rgb(236, 162, 64);
+            padding-left:10%;
+            margin-top: 2%;
+            width:40vw;
+            display:inline-flex;
+            flex-wrap: wrap;
+            border-radius: 6px;
+            overflow: visible;
+            word-wrap: break-word;
+    
+        }
+        .text{
+            padding:3%  5%; 
+            font-family: Balsamiq Sans;
+            word-wrap: break-word;
+            font-size: large;
+        }
+        .editdeletediv{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            /* background-color: #888888; */
+            width:250px;
+            /* min-width: 40%; */
+            padding:2% 0%;
+            margin-left: -0%;
+        }
+        .editdiv{
+                /* background-color: red; */
+                margin-left: 0%;
+        }
+        .deletediv{
+                /* background-color: blue; */
+                margin-left: 40%;
+        }
+        .textdiv{
+            width:40%;
+            padding-top: 2%;
+        }
+        .edit{
+            padding:30% 90%;
+            background-color:black;
+            color:white;
+            border-radius: 20% 10%;
+            cursor: pointer;
+        }
+        .delete{
+            padding:20% 80%;
+            background-color:black;
+            color:white;
+            border-radius: 20% 10%;
+            cursor: pointer;
+        }
+        #userInput{
+            border-radius: 9px;
+        }
+        
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+     
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #888;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      
+      background-color: rgba(224, 132, 19, 0.774);
+    
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+     background-color: #ADFF2F;
+  }
+
+        </style>
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body id="body">
+    <h1 style="margin-left: 3%;font-family: Dancing Script;color:white;position: fixed;">Todo <span style="font-size: 0.9rem;">by grpnpraveen</span></h1>
+
+    <div id="static">
+        <form autocomplete="off" id="form">
+            <input id="userInput" type="text" placeholder="what's in your mind?">
+            <button type="submit" id="create">Create</button>
+        </form>
+    </div>
+    <div id="container">
+        <div id="display">
+           <!-- <div class="row">
+                <div class="textdiv"><div class="text">All Done</div></div>
+                <div class="editdeletediv">
+                    <div class="editdiv"><button class="edit">Edit</button></div>
+                    <div class="deletediv"><button class="delete">Delete</button></div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script id="newscript"></script>
+    <script>
+
+            function docReady(fn) {
+                // see if DOM is already available
+                if (document.readyState === "complete" || document.readyState === "interactive") {
+                    // call on next available tick
+                    setTimeout(fn, 20);
+                } else {
+                    document.addEventListener("DOMContentLoaded", fn);
+                }
+            }  
+
+            docReady(function() {
+
+        var buttonsList=[];
+        var rowidList=[];
+        var true_ids=[];
+        const form=document.getElementById("form");
+        const display=document.getElementById("display");
+        const userInput=document.getElementById("userInput");
+        var newScript = document.getElementById("newscript");
+        //getTodos
+        const getTodos=()=>{
+                fetch('/getTodos',{method:"get"}).then((response)=>{
+                return response.json();
+
+                }).then((data)=>{
+                console.log("Gettodos Got the data");
+                console.log(data);
+                show(data);
+            });
+        };   
+        getTodos();    
+
+        //reset input value
+        const resetUserInput=()=>{userInput.value="";};
+        //deleteTodo
+        var x=0;
+       
+        //building ids
+        const buildIds=(todo)=>{
+            return {
+                todoId:todo._id,
+                editId:"edit_"+todo._id,
+                deleteId:"delete_"+todo._id,
+                rowId:"row_"+todo._id
+            };
+        };
+        //build template
+        buildTemplate=(todo,ids)=>{
+            let id=ids.deleteId;
+            return `
+                            <div class="row" id="${ids.rowId}">
+                                <div class="textdiv"><div class="text" id="${ids.todoId}">${todo.todo}</div></div>
+                                <div class="editdeletediv">
+                                    <div class="deletediv"><button class="delete" id="${ids.deleteId}">Delete</button></div>
+                                </div>
+                            </div>`;
+                             // <div class="editdiv"><button class="edit" id="${ids.editId}">Edit</button></div>
+        };
+
+
+        //showing
+        const show=(data)=>{
+            data.forEach(todo => {
+            ids=buildIds(todo);
+            console.log("Show");
+            console.log(ids.todoId);
+            display.innerHTML+=buildTemplate(todo,ids);
+            buttonsList.push(document.getElementById(ids.deleteId));
+            rowidList.push(document.getElementById(ids.rowId));
+            true_ids.push(document.getElementById(ids.todoId));
+            });  
+            console.log("BUTTONS");
+            console.log(buttonsList);
+            console.log(true_ids);
+            deletefunction(buttonsList,rowidList,true_ids);
+        };
+        
+        function deletefunction(btns,rowids,true_ids)
+        {
+            for(eachbtn in btns)
+            {
+                console.log("each");
+                console.log(true_ids);
+                let id=btns[eachbtn].id;
+                let rowid=rowids[eachbtn].id;
+                let true_id=true_ids[eachbtn].id;
+                console.log(true_id);
+                console.log(id);
+                console.log(rowid);
+                document.getElementById(id).addEventListener("click",()=>
+                {
+                    console.log("yes"+ rowid);
+                    fetch(`/${true_id}`,{method:"delete"})
+                .then((response)=>{return response.json();})
+                .then((data)=>{
+                    let music = new Audio('delete.mp3');
+                         music.play();
+                      if(data.ok==1)
+                      {
+                        document.getElementById(rowid).remove();
+                      }
+                });
+                });
+
+            }
+        }
+
+
+        //form inserting into database
+        form.addEventListener('submit', handleForm);
+        function handleForm(event) { 
+            event.preventDefault(); 
+            if(userInput.value!="" && userInput.value!=" " ){
+            fetch('/',{method:"post",
+            body:JSON.stringify({todo:userInput.value}),
+            headers:{
+                "Content-Type":"application/json; charset=utf-8"
+            }}).then((response)=>{return response.json();})
+            .then((data)=>{
+                if(data.result.acknowledged==true){
+                    //data printing
+                    console.log("FORM");
+                    console.log(data);
+                    //inserting
+                    let result=data["result"];
+                    let id=result["insertedId"];
+                    let todo={"_id":id ,"todo":userInput.value};
+                    let arr=[todo];
+                    resetUserInput(); 
+                    show(arr);  
+                }
+                let music = new Audio('create.mp3');
+                music.play();
+                resetUserInput(); 
+            });
+        }
+         
+        } 
+
+    });
+        
+        
+   
+
+
+    </script>
+</body>
+</html>
