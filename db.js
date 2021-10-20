@@ -2,7 +2,7 @@ const mongodb=require("mongodb")
 const MongodbClient=mongodb.MongoClient;
 const ObjectID=mongodb.ObjectId;
 const dbname="crud_mongodb";
-const url="mongodb://localhost:27017";
+const url="mongodb+srv://admin:root@cluster0.cjpup.mongodb.net/crud_mongodb?retryWrites=true&w=majority";
 const mongoOptions={useNewUrlParser:true};
 
 var state={
