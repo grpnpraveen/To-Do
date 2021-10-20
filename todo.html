@@ -253,6 +253,7 @@
         
         function deletefunction(btns,rowids,true_ids)
         {
+
             for(eachbtn in btns)
             {
                 console.log("each");
@@ -263,7 +264,9 @@
                 console.log(true_id);
                 console.log(id);
                 console.log(rowid);
-                document.getElementById(id).addEventListener("click",()=>
+                if(document.getElementById(id))
+                {
+                    document.getElementById(id).addEventListener("click",()=>
                 {
                     console.log("yes"+ rowid);
                     fetch(`/${true_id}`,{method:"delete"})
@@ -277,6 +280,10 @@
                       }
                 });
                 });
+                }
+                else{
+                    continue;
+                }
 
             }
         }
