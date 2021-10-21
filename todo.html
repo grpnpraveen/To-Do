@@ -294,11 +294,12 @@
         form.addEventListener('submit', handleForm);
         function handleForm(event) { 
             event.preventDefault(); 
-             let str=userInput.value; 
+            let str=userInput.value; 
+            let str2=userInput.value;
             resetUserInput(); 
             if(str.trim().length!=0){
             fetch('/',{method:"post",
-            body:JSON.stringify({todo:userInput.value}),
+            body:JSON.stringify({todo:str2}),
             headers:{
                 "Content-Type":"application/json; charset=utf-8"
             }}).then((response)=>{return response.json();})
@@ -310,7 +311,7 @@
                     //inserting
                     let result=data["result"];
                     let id=result["insertedId"];
-                    let todo={"_id":id ,"todo":str};
+                    let todo={"_id":id ,"todo":str2};
                     let arr=[todo];
                     show(arr);  
                 }
