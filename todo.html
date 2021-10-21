@@ -294,7 +294,9 @@
         form.addEventListener('submit', handleForm);
         function handleForm(event) { 
             event.preventDefault(); 
-             if(userInput.value.trim().length!=0){
+             let str=userInput.value; 
+            resetUserInput(); 
+            if(str.trim().length!=0){
             fetch('/',{method:"post",
             body:JSON.stringify({todo:userInput.value}),
             headers:{
@@ -308,14 +310,12 @@
                     //inserting
                     let result=data["result"];
                     let id=result["insertedId"];
-                    let todo={"_id":id ,"todo":userInput.value};
+                    let todo={"_id":id ,"todo":str};
                     let arr=[todo];
-                    resetUserInput(); 
                     show(arr);  
                 }
                 let music = new Audio('create.mp3');
                 music.play();
-                resetUserInput(); 
             });
         }
          
