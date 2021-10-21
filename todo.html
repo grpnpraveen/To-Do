@@ -294,7 +294,7 @@
         form.addEventListener('submit', handleForm);
         function handleForm(event) { 
             event.preventDefault(); 
-            if(userInput.value!="" && userInput.value!=" " ){
+             if(userInput.value.trim().length!=0){
             fetch('/',{method:"post",
             body:JSON.stringify({todo:userInput.value}),
             headers:{
