@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <link rel="icon" href="icon.png">
+<link rel="icon" href="icon.png">
     <style>
         body{
             margin:0;
@@ -123,7 +123,26 @@
         #userInput{
             border-radius: 9px;
         }
-        
+        #quote{
+            position: absolute;
+            color:rgb(104, 235, 148);
+            background-color: rgba(68, 74, 80, 0.2);
+            backdrop-filter: blur(23px);
+            font-family: Dancing Script;
+            width:15%;
+            margin-top: 14vh;
+            margin-left: 80%;
+            height:15vh;
+            border-radius: 8px;
+            align-items: center;
+            /* word-wrap: break-word; */
+            text-align: justify;
+            padding:1% 1%;
+        }
+        #text{
+            justify-content: center;
+            align-items: center;
+        }
 
 /* width */
 ::-webkit-scrollbar {
@@ -153,7 +172,7 @@
 </head>
 <body id="body">
     <h1 style="margin-left: 3%;font-family: Dancing Script;color:white;position: fixed;">Todo <span style="font-size: 0.9rem;">by grpnpraveen</span></h1>
-
+    <div id="quote"><div id="text"></div></div>
     <div id="static">
         <form autocomplete="off" id="form">
             <input id="userInput" type="text" placeholder="what's in your mind?">
@@ -175,14 +194,22 @@
     <script id="newscript"></script>
     <script>
 
+                fetch('http://api.quotable.io/random',{method:"get"})
+                .then(res=>res.json())
+                .then((data)=>{document.getElementById("text").innerHTML="❝"+data.content+"❞";}); 
+     
+       
             function docReady(fn) {
+    
                 // see if DOM is already available
                 if (document.readyState === "complete" || document.readyState === "interactive") {
                     // call on next available tick
                     setTimeout(fn, 20);
+                
                 } else {
                     document.addEventListener("DOMContentLoaded", fn);
                 }
+
             }  
 
             docReady(function() {
@@ -293,7 +320,7 @@
         //form inserting into database
         form.addEventListener('submit', handleForm);
         function handleForm(event) { 
-            event.preventDefault(); 
+            event.preventDefault();
             let str=userInput.value; 
             let str2=userInput.value;
             resetUserInput(); 
@@ -317,6 +344,7 @@
                 }
                 let music = new Audio('create.mp3');
                 music.play();
+                
             });
         }
          
