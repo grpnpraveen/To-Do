@@ -193,7 +193,16 @@
 
     <script id="newscript"></script>
     <script>
-
+                    
+                 var roomId=prompt("Create or Enter a RoomID:");
+                fetch("/room",{method:"post",
+                body:JSON.stringify({Id:roomId}),
+                headers:{
+                    "Content-Type":"application/json; charset=utf-8"
+            }}).then((response)=>{return response.json();}).then(data=>console.log(data));
+        
+        
+        
                 fetch('https://api.quotable.io/random',{method:"get"})
                 .then(res=>res.json())
                 .then((data)=>{document.getElementById("text").innerHTML="❝"+data.content+"❞";}); 
