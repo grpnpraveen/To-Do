@@ -4,7 +4,9 @@ const express=require("express");
 const app=express();
 app.use(express.json())
 app.use(express.static('public'));
-const collection="todo";
+// var roomCode=prompt("Create or Enter the room-code:");
+// const collection=roomCode;
+var collection="todo";
 
 //db connection 
 db.connect((err)=>{
@@ -14,18 +16,9 @@ db.connect((err)=>{
         process.exit();
     }
     else{
-//         app.listen(3000,()=>{
-//             console.log("Connected to database and listening on port 3000 http://localhost:3000");
-//         });
-
-        // Establishing the port
-        const PORT = process.env.PORT ||3000;
-
-        // Executing the server on given port number
-        app.listen(PORT, ()=>{console.log(`Server started on port ${PORT}`)});
-
-
-
+        app.listen(3000,()=>{
+            console.log("Connected to database and listening on port 3000 http://localhost:3000");
+        });
     }
 });
 
@@ -48,6 +41,14 @@ db.getDB().collection(collection).find().toArray((err,documents)=>{
                             res.json(documents);
                         }
                         });
+});
+
+//create room
+app.post('/room',(req,res)=>{
+
+   collection=req.body.Id;
+   console.log("ROOM"+collection);
+   res.json({result:"ok"});
 });
 
 // create a new 
@@ -93,3 +94,5 @@ app.delete('/:id',(req,res)=>{
         }
     });
 });
+
+
